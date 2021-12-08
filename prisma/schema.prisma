@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  TEACHER
+  COMMON
+}
+
+model User {
+  id                         String          @id @default(uuid())
+  email                      String          @unique
+  name                       String
+  password                   String
+  telephone                  String?
+  type                       UserType        @default(COMMON)
+  school                     School?
+  taught_subjects            Subject[]
+  subscribed_volunteer_works VolunteerWork[]
+  created_at                 DateTime        @default(now())
+  updated_at                 DateTime        @default(now())
+
+  @@map("users")
+}
+
+model Subject {
+  id         String   @id @default(uuid())
+  name       String
+  teachers   User[]
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  @@map("subjects")
+}
+
+model VolunteerWork {
+  id                  String   @id @default(uuid())
+  title               String
+  description         String
+  school_id           String
+  created_at          DateTime @default(now())
+  updated_at          DateTime @default(now())
+  subscribed_teachers User[]
+  sponsor_school      School   @relation(fields: [school_id], references: [id])
+
+  @@map("volunteer_works")
+}
+
+model School {
+  id              String          @id @default(uuid())
+  name            String
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @default(now())
+  volunteer_works VolunteerWork[]
+  user            User            @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@map("schools")
+}
