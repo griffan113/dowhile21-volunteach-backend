@@ -3,7 +3,6 @@ import {
   Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { User, UserType } from '.prisma/client';
 
@@ -12,7 +11,6 @@ import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 interface IRequest {
   id: string;
-  currentUser: User;
   name?: string;
   email?: string;
   password?: string;
@@ -31,23 +29,15 @@ export default class UpdateUserService {
     private readonly hashProvider: IHashProvider
   ) {}
 
-  public async execute({
-    id,
-    currentUser,
-    email,
-    name,
-    password,
-    old_password,
-    telephone,
-    type,
-  }: IRequest): Promise<User> {
+  public async execute(
+    currentUser: User,
+    { id, email, name, password, old_password, telephone, type }: IRequest
+  ): Promise<User> {
+    if (currentUser.id !== id) throw new NotFoundException('User not found');
+
     const findUser = await this.userRepository.findById(id);
 
     if (!findUser) throw new NotFoundException('User not found');
-
-    if (currentUser.id !== id) {
-      throw new UnauthorizedException();
-    }
 
     if (email) {
       const verifyEmailAvailability = await this.userRepository.findByEmail(

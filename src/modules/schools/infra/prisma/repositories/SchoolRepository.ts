@@ -15,6 +15,7 @@ export default class SchoolRepository implements ISchoolRepository {
   public async findById(id: string): Promise<School | undefined> {
     const school = await this.ormRepository.school.findUnique({
       where: { id },
+      include: { volunteer_works: true },
     });
 
     return school;

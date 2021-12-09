@@ -1,9 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { School, User } from '.prisma/client';
 import { ISchoolRepository } from '../repositories/ISchoolRepository';
@@ -14,7 +9,7 @@ import { IUserRepository } from '@modules/users/repositories/IUserRepository';
 export default class CreateSchoolService {
   constructor(
     @Inject('SchoolRepository')
-    private noteRepository: ISchoolRepository,
+    private schoolRepository: ISchoolRepository,
 
     @Inject('UserRepository')
     private userRepository: IUserRepository
@@ -28,11 +23,10 @@ export default class CreateSchoolService {
 
     if (!verifyUserExists) throw new NotFoundException('User not found');
 
-    if (user_id !== currentUser.id) {
-      throw new UnauthorizedException();
-    }
+    if (user_id !== currentUser.id)
+      throw new NotFoundException('User not found');
 
-    const createSchool = await this.noteRepository.create({
+    const createSchool = await this.schoolRepository.create({
       name,
       user_id,
     });

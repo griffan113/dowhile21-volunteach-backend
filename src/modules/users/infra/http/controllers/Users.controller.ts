@@ -62,13 +62,12 @@ export default class UsersController {
 
   @Put(':id')
   public async update(
-    @GetUser() user: User,
+    @GetUser() currentUser: User,
     @Param('id', ParseUUIDPipe) id: string,
     @Body(ValidationPipe) updateUserDto: UpdateUserDTO
   ): Promise<User> {
-    const updateUser = await this.updateUserService.execute({
+    const updateUser = await this.updateUserService.execute(currentUser, {
       id,
-      currentUser: user,
       ...updateUserDto,
     });
 
@@ -76,15 +75,23 @@ export default class UsersController {
   }
 
   @Delete(':id')
-  public async delete(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const deleteUser = await this.deleteUserService.execute({ id });
+  public async delete(
+    @GetUser() currentUser: User,
+    @Param('id', ParseUUIDPipe) id: string
+  ): Promise<User> {
+    const deleteUser = await this.deleteUserService.execute(currentUser, {
+      id,
+    });
 
     return deleteUser;
   }
 
   @Get(':id')
-  public async show(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const showUser = await this.showUserService.execute({ id });
+  public async show(
+    @GetUser() currentUser: User,
+    @Param('id', ParseUUIDPipe) id: string
+  ): Promise<User> {
+    const showUser = await this.showUserService.execute(currentUser, { id });
 
     return showUser;
   }

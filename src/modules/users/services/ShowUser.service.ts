@@ -14,7 +14,9 @@ export default class ShowUserService {
     private userRepository: IUserRepository
   ) {}
 
-  public async execute({ id }: IRequest): Promise<User> {
+  public async execute(currentUser: User, { id }: IRequest): Promise<User> {
+    if (currentUser.id !== id) throw new NotFoundException('User not found');
+
     const findUser = await this.userRepository.findById(id);
 
     if (!findUser) throw new NotFoundException('User not found');

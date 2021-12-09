@@ -7,6 +7,7 @@ import { PrismaService } from './infra/prisma/Prisma.service';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@modules/users/infra/http/guards/JwtAuth.guard';
 import { SchoolsModule } from '@modules/schools/schools.module';
+import { VolunteerWorksModule } from '@modules/volunteer_works/volunteer_works.module';
 
 @Module({
   providers: [
@@ -18,6 +19,7 @@ import { SchoolsModule } from '@modules/schools/schools.module';
   ],
   imports: [
     SchoolsModule,
+    VolunteerWorksModule,
     UsersModule,
     ThrottlerModule.forRoot({
       ttl: 60,

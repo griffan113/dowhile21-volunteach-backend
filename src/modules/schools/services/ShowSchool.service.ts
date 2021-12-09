@@ -7,7 +7,7 @@ interface IRequest {
 }
 
 @Injectable()
-export default class DeleteSchoolService {
+export default class ShowSchoolService {
   constructor(
     @Inject('SchoolRepository')
     private schoolRepository: ISchoolRepository
@@ -23,8 +23,6 @@ export default class DeleteSchoolService {
       throw new NotFoundException('School not found');
     }
 
-    const deleteSchool = await this.schoolRepository.delete(id);
-
-    return deleteSchool;
+    return findSchool;
   }
 }
