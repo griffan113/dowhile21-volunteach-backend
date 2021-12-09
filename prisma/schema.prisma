@@ -29,11 +29,12 @@ model User {
 }
 
 model Subject {
-  id         String   @id @default(uuid())
-  name       String
-  teachers   User[]
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  id              String          @id @default(uuid())
+  name            String
+  teachers        User[]
+  volunteer_works VolunteerWork[]
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @default(now())
 
   @@map("subjects")
 }
@@ -43,6 +44,8 @@ model VolunteerWork {
   title               String
   description         String
   school_id           String
+  subject_id          String
+  match_subject       Subject  @relation(fields: [subject_id], references: [id])
   created_at          DateTime @default(now())
   updated_at          DateTime @default(now())
   subscribed_teachers User[]
@@ -58,7 +61,7 @@ model School {
   updated_at      DateTime        @default(now())
   volunteer_works VolunteerWork[]
   user            User            @relation(fields: [user_id], references: [id])
-  user_id String
+  user_id         String          @unique
 
   @@map("schools")
 }

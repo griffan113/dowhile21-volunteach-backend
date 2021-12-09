@@ -2,7 +2,7 @@ import { CreateVolunteerWorkDTO } from '@modules/volunteer_works/dtos/CreateVolu
 import { SubscribeAtVolunteerWorkDTO } from '@modules/volunteer_works/dtos/SubscribeAtVolunteerWorkDTO';
 import { IVolunteerWorkRepository } from '@modules/volunteer_works/repositories/IVolunteerWorkRepository';
 import { Inject, Injectable } from '@nestjs/common';
-import { PrismaClient, VolunteerWork } from '@prisma/client';
+import { PrismaClient, Subject, VolunteerWork } from '@prisma/client';
 
 import { PrismaService } from '@shared/infra/prisma/Prisma.service';
 
@@ -15,9 +15,15 @@ export default class VolunteerWorkRepository
     private ormRepository: PrismaClient
   ) {}
 
-  public async findById(id: string): Promise<VolunteerWork | undefined> {
+  public async findById(id: string): Promise<
+    | (VolunteerWork & {
+        match_subject: Subject;
+      })
+    | undefined
+  > {
     const volunteerWork = await this.ormRepository.volunteerWork.findUnique({
       where: { id },
+      include: { match_subject: true },
     });
 
     return volunteerWork;
@@ -29,14 +35,30 @@ export default class VolunteerWorkRepository
   ): Promise<VolunteerWork> {
     const { user_id } = subscribeAtVolunteerWorkDTO;
 
-    const VolunteerWork = await this.ormRepository.volunteerWork.update({
+    const volunteerWork = await this.ormRepository.volunteerWork.update({
       data: {
         subscribed_teachers: { connect: { id: user_id } },
       },
       where: { id: volunteer_work_id },
     });
 
-    return VolunteerWork;
+    return volunteerWork;
+  }
+
+  public async unsubscribe(
+    volunteer_work_id: string,
+    subscribeAtVolunteerWorkDTO: SubscribeAtVolunteerWorkDTO
+  ): Promise<VolunteerWork> {
+    const { user_id } = subscribeAtVolunteerWorkDTO;
+
+    const volunteerWork = await this.ormRepository.volunteerWork.update({
+      data: {
+        subscribed_teachers: { disconnect: { id: user_id } },
+      },
+      where: { id: volunteer_work_id },
+    });
+
+    return volunteerWork;
   }
 
   public async delete(id: string): Promise<VolunteerWork> {
@@ -50,13 +72,14 @@ export default class VolunteerWorkRepository
   public async create(
     volunteerWorkData: CreateVolunteerWorkDTO
   ): Promise<VolunteerWork> {
-    const { title, description, school_id } = volunteerWorkData;
+    const { title, description, school_id, subject_id } = volunteerWorkData;
 
     const volunteerWork = await this.ormRepository.volunteerWork.create({
       data: {
         title,
         description,
         sponsor_school: { connect: { id: school_id } },
+        match_subject: { connect: { id: subject_id } },
       },
     });
 

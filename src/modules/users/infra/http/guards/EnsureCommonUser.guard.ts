@@ -16,8 +16,6 @@ export class EnsureCommonUserGuard extends AuthGuard('jwt') {
 
   handleRequest(err, user) {
     // You can throw an exception based on either "info" or "err" arguments
-    console.log(user);
-
     if (err || !user) {
       throw err || new UnauthorizedException();
     }

@@ -8,7 +8,6 @@ import { VolunteerWork } from '.prisma/client';
 
 import { IVolunteerWorkRepository } from '../repositories/IVolunteerWorkRepository';
 import { CompleteUser } from '@modules/users/types/CompleteUser';
-import { IUserRepository } from '@modules/users/repositories/IUserRepository';
 
 interface IRequest {
   id: string;
@@ -16,13 +15,10 @@ interface IRequest {
 }
 
 @Injectable()
-export default class SubscribeAtSchoolVolunteerWorkService {
+export default class UnsubscribeAtSchoolVolunteerWorkService {
   constructor(
     @Inject('VolunteerWorkRepository')
-    private volunteerWorkRepository: IVolunteerWorkRepository,
-
-    @Inject('UserRepository')
-    private userRepository: IUserRepository
+    private volunteerWorkRepository: IVolunteerWorkRepository
   ) {}
 
   public async execute(
@@ -37,28 +33,17 @@ export default class SubscribeAtSchoolVolunteerWorkService {
     if (!findVolunteerWork)
       throw new NotFoundException('Volunteer Work not found');
 
-    const findUser = await this.userRepository.findById(currentUser.id);
-
-    const isUserSubscribedInSubject = findUser.taught_subjects.some(
-      (subject) => {
-        return findVolunteerWork.match_subject.id === subject.id;
-      }
-    );
-
-    if (!isUserSubscribedInSubject)
-      throw new NotFoundException("You don't have the required subject");
-
     const isUserSubscribedInVolunteerWork =
       currentUser.subscribed_volunteer_works.some(
         (volunteerWork) => volunteerWork.id === id
       );
 
-    if (isUserSubscribedInVolunteerWork)
+    if (!isUserSubscribedInVolunteerWork)
       throw new BadRequestException(
-        "You're already subscribed in this volunteer work"
+        "You're not subscribed in this volunteer work"
       );
 
-    const createVolunteerWork = await this.volunteerWorkRepository.subscribe(
+    const createVolunteerWork = await this.volunteerWorkRepository.unsubscribe(
       id,
       {
         user_id,

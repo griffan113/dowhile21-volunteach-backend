@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '@modules/users/infra/http/guards/JwtAuth.guard';
 import { SchoolsModule } from '@modules/schools/schools.module';
 import { VolunteerWorksModule } from '@modules/volunteer_works/volunteer_works.module';
+import { SubjectsModule } from '@modules/subjects/subjects.module';
 
 @Module({
   providers: [
@@ -19,6 +20,7 @@ import { VolunteerWorksModule } from '@modules/volunteer_works/volunteer_works.m
   ],
   imports: [
     SchoolsModule,
+    SubjectsModule,
     VolunteerWorksModule,
     UsersModule,
     ThrottlerModule.forRoot({

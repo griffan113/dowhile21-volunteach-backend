@@ -1,7 +1,13 @@
 import { CreateUserDTO } from '@modules/users/dtos/CreateUserDTO';
 import { IUserRepository } from '@modules/users/repositories/IUserRepository';
 import { Inject, Injectable } from '@nestjs/common';
-import { PrismaClient, User } from '@prisma/client';
+import {
+  PrismaClient,
+  School,
+  Subject,
+  User,
+  VolunteerWork,
+} from '@prisma/client';
 
 import { PrismaService } from '@shared/infra/prisma/Prisma.service';
 
@@ -12,7 +18,14 @@ export default class UserRepository implements IUserRepository {
     private ormRepository: PrismaClient
   ) {}
 
-  public async findById(id: string): Promise<User | undefined> {
+  public async findById(id: string): Promise<
+    | (User & {
+        taught_subjects: Subject[];
+        school: School;
+        subscribed_volunteer_works: VolunteerWork[];
+      })
+    | undefined
+  > {
     const user = await this.ormRepository.user.findUnique({
       where: { id },
       include: {

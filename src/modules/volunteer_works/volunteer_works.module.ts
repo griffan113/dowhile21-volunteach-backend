@@ -9,6 +9,9 @@ import VolunteerWorksController from '@modules/volunteer_works/infra/http/contro
 import SubscribeAtVolunteerWorkController from './infra/http/controllers/SubscribeAtVolunteerWork.controller';
 import SubscribeAtSchoolVolunteerWorkService from './services/SubscribeAtVolunteerWork.service';
 import UpdateVolunteerWorkService from './services/UpdateVolunteerWork.service';
+import SubjectRepository from '@modules/subjects/infra/prisma/repositories/SubjectRepository';
+import UnsubscribeAtVolunteerWorkController from './infra/http/controllers/UnsubscribeAtVolunteerWork.controller';
+import UnsubscribeAtSchoolVolunteerWorkService from './services/UnsubscribeAtVolunteerWork.service';
 
 @Module({
   providers: [
@@ -16,6 +19,7 @@ import UpdateVolunteerWorkService from './services/UpdateVolunteerWork.service';
     { provide: 'SchoolRepository', useClass: SchoolRepository },
     { provide: 'VolunteerWorkRepository', useClass: VolunteerWorkRepository },
     { provide: 'UserRepository', useClass: UserRepository },
+    { provide: 'SubjectRepository', useClass: SubjectRepository },
     {
       provide: 'CreateSchoolVolunteerWorkService',
       useClass: CreateSchoolVolunteerWorkService,
@@ -28,7 +32,15 @@ import UpdateVolunteerWorkService from './services/UpdateVolunteerWork.service';
       provide: 'SubscribeAtSchoolVolunteerWorkService',
       useClass: SubscribeAtSchoolVolunteerWorkService,
     },
+    {
+      provide: 'UnsubscribeAtSchoolVolunteerWorkService',
+      useClass: UnsubscribeAtSchoolVolunteerWorkService,
+    },
   ],
-  controllers: [VolunteerWorksController, SubscribeAtVolunteerWorkController],
+  controllers: [
+    VolunteerWorksController,
+    SubscribeAtVolunteerWorkController,
+    UnsubscribeAtVolunteerWorkController,
+  ],
 })
 export class VolunteerWorksModule {}

@@ -11,4 +11,7 @@ export abstract class CreateVolunteerWorkDTO {
 
   @IsUUID()
   school_id: string;
+
+  @IsUUID()
+  subject_id: string;
 }
