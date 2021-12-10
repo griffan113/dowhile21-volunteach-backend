@@ -41,7 +41,7 @@ $ yarn prisma migrate dev
 ## Rodando as seeds do banco (Caso não sejam executas junto com as migrations)
 
 ```bash
-$ yarn prisma migrate dev
+$ yarn prisma db seed
 ```
 
 ## Rodando o app
