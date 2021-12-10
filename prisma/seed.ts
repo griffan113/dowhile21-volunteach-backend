@@ -7,7 +7,7 @@ const subjectsData: Prisma.SubjectCreateInput[] = [
     name: 'Matemática',
   },
   {
-    name: 'Geografica',
+    name: 'Geografia',
   },
   {
     name: 'Português',
@@ -26,6 +26,9 @@ const subjectsData: Prisma.SubjectCreateInput[] = [
   },
   {
     name: 'Filosofia',
+  },
+  {
+    name: 'Biologia',
   },
   {
     name: 'Inglês',
