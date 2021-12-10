@@ -24,6 +24,8 @@ Está disponível em `common/sync` o arquivo para sincronização de requests do
 
 ## Instação
 
+- Renomeie o arquivo `.env.example` para `.env`
+
 ```bash
 $ npm install
 ```
@@ -54,3 +56,5 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+`#BuildTheFuture`
