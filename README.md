@@ -12,7 +12,7 @@ VolunTeach é uma plataforma de recrutamento de professores voluntários onde as
 
 ## Importando o JSON de requests
 
-Está disponível em `common/sync` o arquivo para sincronização de requests do Insomnia, basta baixar o arquivo e importá-lo na tela inicial do Insmomnia para ter todas as requisições prontas.
+Está disponível em `common/sync` o arquivo para sincronização de requests do Insomnia, basta baixar o arquivo e importá-lo na tela inicial do Insomnia para ter todas as requisições prontas.
 
 ## Regras básicas:
 
