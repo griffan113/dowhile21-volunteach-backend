@@ -22,7 +22,7 @@ Está disponível em `common/sync` o arquivo para sincronização de requests do
 - Uma escola pode possuir diversos trabalhos voluntários
 - Um trabalho voluntário pode possuir diversos professores
 
-## Instação
+## Instalação
 
 - Renomeie o arquivo `.env.example` para `.env`
 
